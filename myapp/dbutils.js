@@ -13,6 +13,7 @@ var employeeSchema = new mongoose.Schema({
 	comp_id : {type:String},
 	addr :{type:String},
 	pin : {type:String},
+	balance :{type:Number,default:0},
 });
 
 
@@ -113,5 +114,14 @@ var transactionSchema = new mongoose.Schema({
 				else
 					callback(0,res);
 			})
+		},
+		checkLogin:function(details,callback)
+		{
+			employee.findOne({name : details.name , pin : details.pin},function(err,res){
+				if(err)
+					callback(err,null);
+				else
+					callback(0,res);
+			});
 		},
 	}

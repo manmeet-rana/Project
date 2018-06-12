@@ -73,4 +73,49 @@ router.get('/vendor',function (req,res,next) {
 	});
 });
 
+router.post('/pay',function(req,res,next){
+	db.newTransaction(req.body,(err,result)=>{
+		if(err)
+			console.log(err);
+		else
+		{
+			console.log("Paid to vendor successfully");
+		}
+		res.redirect("/users/profile");
+	})
+});
+
+// router.get('/profile',function(req,res,next){
+// 	var user = {
+// 		name : req.cookie.name,
+// 		pin  : req.cookie.pin,
+// 	};
+// 	db.
+// });
+
+router.get('/login',(req,res)=>{
+	res.render('login');
+});
+
+router.post('/profile',(req,res,next)=>{
+	db.checkLogin(req.body,(err,result)=>{
+		if(err)
+		{
+			console.log(err);
+			res.redirect('/users/login');
+		}
+		else
+		{
+			if(result)
+			{
+				res.render('profile',{user : result});
+			}
+			else
+			{
+				res.redirect('/users/login');
+			}
+		}
+	});
+})
+
 module.exports = router;
