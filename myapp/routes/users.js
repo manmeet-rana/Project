@@ -51,4 +51,26 @@ router.get("/all",(req,res,next)=>{
 	});
 });
 
+router.post('/vendor',(req,res,next)=>{
+	db.addVendor(req.body,(err,result)=>{
+		if(err)
+			console.log("error occured");
+		else
+			{console.log("vendor details saved");
+		res.redirect('/users/vendor');}
+	});
+});
+
+router.get('/vendor',function (req,res,next) {
+	db.showVendor(function(err,result){
+		if(err)
+			{console.log("error occured while showing vendor list");
+		res.render('vendor');}
+		else
+			{
+				res.render('vendor',{result : result});
+			}
+	});
+});
+
 module.exports = router;

@@ -20,8 +20,16 @@ var companySchema = new mongoose.Schema({
 	_id : {type :String},
 	name : {type:String},
 });
+
+var vendorSchema = new mongoose.Schema({
+	name : {type:String},
+	balance : {type:Number},
+});
+
+
 	var employee = mongoose.model('employee',employeeSchema);
 	var company = mongoose.model('company',companySchema);
+	var vendor = mongoose.model('vendor',vendorSchema);
 	module.exports ={
 		registerEmployee : function(req,callback){
 			var data = new employee(req);
@@ -55,6 +63,23 @@ var companySchema = new mongoose.Schema({
 		},
 		showCompany:function(callback){
 			company.find({},function (err,res) {
+				if(err)
+					callback(1,null);
+				else
+					callback(0,res);
+			})
+		},
+		addVendor:function (details,callback) {
+			var data = new vendor(details);
+			data.save(function (err,result) {
+				if(err)
+					callback(1,null);
+				else
+					callback(0,result);
+			});
+		},
+		showVendor:function(callback){
+			vendor.find({},function (err,res) {
 				if(err)
 					callback(1,null);
 				else
