@@ -1,8 +1,117 @@
 <html>
-<head></head>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
 <body>
 <br><br><br><br><br><br><br><br>
 <h1>HI <%=user.name%></h1>
+<h1> Balance : <%=user.balance %></h1>
+<div class="container">
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Statement</button>
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Your Monthly Statement Is Here</h4>
+        </div>
+        <div class="modal-body">
+        	<table>
+        		<tr>
+        			<th>Sr No</th>
+        			<th>Emp Name</th>
+        			<th>Company_ID</th>
+        			<th>Vendor Name</th>
+        			<th>Date</th>
+        			<th>Debited Amount</th>
+        		</tr>
+          <%transaction.forEach(function(transaction,count){%>
+          	<tr>
+          		<td><%=count+1%></td>
+          		<td><%=transaction.emp_name%></td>
+          		<td><%=transaction.comp_id%></td>
+          		<td><%=transaction.vendor_name%></td>
+          		<td><%=transaction.doneAt%></td>
+          		<td><%=transaction.debit_amt%></td>
+      	  <%});%>
+      	  </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
 
+<table>
+	<tr>
+		<th>Vendor Name</th>
+		<th>Amount </th>
+		<th>Add Remarks</th>
+		<th>Pay</th>
+	</tr>
+<% vendor.forEach(function(vendor){ %>
+<tr>
+	
+		<input type="hidden" value ="<%=user._id%>" name="emp_id">
+		<input type="hidden" value ="<%=user.name%>" name="emp_name">
+		<input type="hidden" value="<%=user.comp_id%>" name="comp_id">
+		<input type="hidden" value="<%=user.balance%>" name="balance">
+		<input type="hidden" name="vendor_name" value = "<%=vendor.name%>">
+<td><%=vendor.name%><input type="hidden" name="vendor_id" value = "<%=vendor._id%>"></td>
+<td><input type="Number" name="debit_amt" placeholder="amount to be paid" ></td>
+<td><input type="text" name="remarks" placeholder="For what it is?" ></td>
+<td><input type="submit" value="Pay Now"></td>
+</form>
+</tr>
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Pay to <%=vendor.name%></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="/users/pay">
+            <div class="modal-body mx-3">
+
+                <div class="md-form mb-5">
+                    <i class="fa fa-envelope prefix grey-text"></i>
+                    <input type="hidden" value ="<%=user._id%>" name="emp_id">
+					<input type="hidden" value ="<%=user.name%>" name="emp_name">
+					<input type="hidden" value="<%=user.comp_id%>" name="comp_id">
+					<input type="hidden" value="<%=user.balance%>" name="balance">
+					<input type="hidden" name="vendor_name" value = "<%=vendor.name%>">
+					<input type="hidden" name="vendor_id" value = "<%=vendor._id%>">
+                    <input type="Number" id="defaultForm-email" name="debit_amt" class="form-control validate">
+                    <label data-error="wrong" data-success="right" for="defaultForm-email">Amount to be paid</label>
+                </div>
+
+                <div class="md-form mb-4">
+                    <i class="fa fa-lock prefix grey-text"></i>
+                    <input type="text" id="defaultForm-pass" name="remarks" class="form-control validate">
+                    <label data-error="wrong" data-success="right" for="defaultForm-pass">Remarks</label>
+                </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-default">Login</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm"><%=vendor.name%></a>
+</div>
+<%});%>
 </body>
 </html>

@@ -74,27 +74,48 @@ router.get('/vendor',function (req,res,next) {
 });
 
 router.post('/pay',function(req,res,next){
-	db.newTransaction(req.body,(err,result)=>{
+	user_balance = req.body.balance;
+	debit_amt = req.body.debit_amt;
+	if(user_balance>debit_amt)
+	{
+		db.newTransaction(req.body,(err,result)=>{
 		if(err)
-			console.log(err);
+			{console.log(err);
+				res.end();}
 		else
 		{
-			console.log("Paid to vendor successfully");
+			let amt=user_balance-debit_amt;
+			var data={
+				debit_amt : amt,
+				id : req.body.emp_id,
+			};
+			db.updateBalance(data,(err,response)=>{
+				if(err)
+				{
+					console.log("Employee balance not updated");
+					res.end();
+					//we can delete the corresponding transaction and revert back the changes
+				}
+				else
+				{
+					res.send("Paid to vendor and employee balance updated");
+				}
+			});
 		}
-		res.redirect("/users/profile");
-	})
+	});
+	}
+	else
+	{
+		res.send("Low balance cant pay now");
+	}
 });
 
-// router.get('/profile',function(req,res,next){
-// 	var user = {
-// 		name : req.cookie.name,
-// 		pin  : req.cookie.pin,
-// 	};
-// 	db.
-// });
+router.post('/statement',(req,res,next)=>{
+
+});
 
 router.get('/login',(req,res)=>{
-	res.render('login');
+	res.render('login',{message:""});
 });
 
 router.post('/profile',(req,res,next)=>{
@@ -102,17 +123,44 @@ router.post('/profile',(req,res,next)=>{
 		if(err)
 		{
 			console.log(err);
-			res.redirect('/users/login');
+			req.flash('fail','failed to login due to server error');
+			res.render('login',{message : req.flash('fail')});
 		}
 		else
 		{
 			if(result)
 			{
-				res.render('profile',{user : result});
+				db.showVendor((err,vendor)=>{
+					if(err)
+					{
+						console.log(err);
+						res.render('profile',{user:result});
+					}
+					else
+					{
+						let query={
+				          id:result._id,
+			            };
+			            console.log("query : "+query);
+			 			
+						db.showTransaction(query,(err,transaction)=>{
+							if(err)
+							{
+								console.log(err);
+								res.render('profile',{user:result , vendor : vendor});
+							}
+							else
+							{
+								res.render('profile',{user:result , vendor : vendor,transaction:transaction});
+							}
+						});
+					}
+				})
 			}
 			else
 			{
-				res.redirect('/users/login');
+				req.flash('login','Invalid credentials try again!');
+				res.render('login',{message : req.flash('login') });
 			}
 		}
 	});

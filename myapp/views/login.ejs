@@ -2,6 +2,9 @@
 <head></head>
 <body>
 
+<% if (message.length > 0) { %>
+        <div ><%= message %></div>
+    <% } %>
 <form action = "/users/profile" method = "post">
 <input type="text" placeholder="name" name="name"><br><br>
 <input type="password" placeholder="Enter your password here..." name="pin"><br><br>
