@@ -49,28 +49,8 @@
   </div>
   
 </div>
-
-<table>
-	<tr>
-		<th>Vendor Name</th>
-		<th>Amount </th>
-		<th>Add Remarks</th>
-		<th>Pay</th>
-	</tr>
 <% vendor.forEach(function(vendor){ %>
-<tr>
-	
-		<input type="hidden" value ="<%=user._id%>" name="emp_id">
-		<input type="hidden" value ="<%=user.name%>" name="emp_name">
-		<input type="hidden" value="<%=user.comp_id%>" name="comp_id">
-		<input type="hidden" value="<%=user.balance%>" name="balance">
-		<input type="hidden" name="vendor_name" value = "<%=vendor.name%>">
-<td><%=vendor.name%><input type="hidden" name="vendor_id" value = "<%=vendor._id%>"></td>
-<td><input type="Number" name="debit_amt" placeholder="amount to be paid" ></td>
-<td><input type="text" name="remarks" placeholder="For what it is?" ></td>
-<td><input type="submit" value="Pay Now"></td>
-</form>
-</tr>
+
 <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

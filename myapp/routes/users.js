@@ -110,10 +110,6 @@ router.post('/pay',function(req,res,next){
 	}
 });
 
-router.post('/statement',(req,res,next)=>{
-
-});
-
 router.get('/login',(req,res)=>{
 	res.render('login',{message:""});
 });
