@@ -35,21 +35,20 @@ router.post('/register',(req,res,next)=>{
 router.post('/company',(req,res,next)=>{
 	db.addCompany(req.body,(err,result)=>{
 		if(err)
-			console.log("error occured");
+			console.log("error occured :" + err);
 		else
 			{console.log("company details saved");
 		res.redirect('/users/company');}
 	});
 });
-
-router.get("/all",(req,res,next)=>{
-	db.showEmployee(function(err,result){
-		if(err)
-			console.log("error occured while showing employees");
-		else
-			res.send(result);
-	});
-});
+// router.get("/all",(req,res,next)=>{
+// 	db.showEmployee(function(err,result){
+// 		if(err)
+// 			console.log("error occured while showing employees");
+// 		else
+// 			res.send(result);
+// 	});
+// });
 
 router.post('/vendor',(req,res,next)=>{
 	db.addVendor(req.body,(err,result)=>{
@@ -147,7 +146,7 @@ router.post('/profile',(req,res,next)=>{
 							}
 							else
 							{
-								res.render('profile',{user:result , vendor : vendor,transaction:transaction});
+								res.render('profile1',{user:result , vendor : vendor,transaction:transaction});
 							}
 						});
 					}
