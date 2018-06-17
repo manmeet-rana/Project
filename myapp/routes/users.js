@@ -9,15 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/company',function (req,res,next) {
-	db.showCompany(function(err,result){
-		if(err)
-			{console.log("error occured while showing companies");
-		res.render('company');}
-		else
-			{
-				res.render('company',{result : result});
-			}
-	});
+	res.render('company');
 });
 
 
@@ -27,7 +19,7 @@ router.post('/register',(req,res,next)=>{
 			console.log("error occured");
 		else
 			{console.log("item saved");
-		res.send("item saved");}
+		res.redirect('/users/login')};
 	});
 });
 
@@ -61,15 +53,7 @@ router.post('/vendor',(req,res,next)=>{
 });
 
 router.get('/vendor',function (req,res,next) {
-	db.showVendor(function(err,result){
-		if(err)
-			{console.log("error occured while showing vendor list");
-		res.render('vendor');}
-		else
-			{
-				res.render('vendor',{result : result});
-			}
-	});
+	res.render('vendor');
 });
 
 router.post('/pay',function(req,res,next){
@@ -97,7 +81,8 @@ router.post('/pay',function(req,res,next){
 				}
 				else
 				{
-					res.send("Paid to vendor and employee balance updated");
+					req.flash('pay',"Paid Successfully");
+					res.render('login',{message:req.flash('pay')});
 				}
 			});
 		}
@@ -105,7 +90,8 @@ router.post('/pay',function(req,res,next){
 	}
 	else
 	{
-		res.send("Low balance cant pay now");
+		req.flash('low_bal',"Low Balance cant pay now");
+		res.render('login',{message:req.flash('low_bal')});
 	}
 });
 
@@ -136,8 +122,6 @@ router.post('/profile',(req,res,next)=>{
 						let query={
 				          id:result._id,
 			            };
-			            console.log("query : "+query);
-			 			
 						db.showTransaction(query,(err,transaction)=>{
 							if(err)
 							{
@@ -146,7 +130,7 @@ router.post('/profile',(req,res,next)=>{
 							}
 							else
 							{
-								res.render('profile1',{user:result , vendor : vendor,transaction:transaction});
+								res.render('profile',{user:result , vendor : vendor,transaction:transaction});
 							}
 						});
 					}

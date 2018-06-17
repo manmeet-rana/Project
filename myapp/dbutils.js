@@ -103,7 +103,6 @@ var transactionSchema = new mongoose.Schema({
 		},
 		newTransaction:function (details,callback) {
 			var data = new transaction(details);
-			console.log(data);
 			data.save(function (err,result) {
 				if(err)
 					callback(err,null);
